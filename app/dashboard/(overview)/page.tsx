@@ -2,16 +2,20 @@ import { Card } from '@/app/ui/dashboard/cards';
 import RevenueChart from '@/app/ui/dashboard/revenue-chart';
 import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
 import { lusitana } from '@/app/ui/fonts';
+// para la trancision de datos
+import { fetchCardData } from '@/app/lib/data';
+import { Suspense } from 'react';
+import { RevenueChartSkeleton,LatestInvoicesSkeleton } from '@/app/ui/skeletons';
 
 // importar datos para el doshboard
-import { fetchRevenue, fetchLatestInvoices, fetchCardData, } from '@/app/lib/data';
+// eliminar por la trancision import { fetchRevenue, fetchLatestInvoices, fetchCardData, } from '@/app/lib/data';
 
  
 export default async function Page() {
   
   //definir las constantes
-  const revenue = await fetchRevenue();
-  const latestInvoices = await fetchLatestInvoices();
+  // eliminar por trancision const revenue = await fetchRevenue();
+  //const latestInvoices = await fetchLatestInvoices();
   const {
     numberOfInvoices,
     numberOfCustomers,
@@ -35,8 +39,12 @@ export default async function Page() {
         /> 
       </div>
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-         <RevenueChart revenue={revenue}  /> 
-         <LatestInvoices latestInvoices={latestInvoices} /> 
+      <Suspense fallback={<RevenueChartSkeleton />}>
+          <RevenueChart />
+        </Suspense> 
+        <Suspense fallback={<LatestInvoicesSkeleton />}>
+          <LatestInvoices />
+        </Suspense>
       </div>
     </main>
   );
