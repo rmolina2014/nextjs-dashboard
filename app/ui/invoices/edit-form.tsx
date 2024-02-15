@@ -1,7 +1,6 @@
 'use client';
-
+import { useFormState } from 'react-dom';
 import { updateInvoice } from '@/app/lib/actions';
-
 import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
 import {
   CheckIcon,
@@ -21,10 +20,12 @@ export default function EditInvoiceForm({
 })
  {
   // valores pasados ​​a la acción del servidor estén codificados
+  const initialState = { message: null, errors: {} };
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
+  const [state, dispatch] = useFormState(updateInvoiceWithId, initialState);
 
   return (
-    <form action={updateInvoiceWithId}>
+    <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
@@ -127,3 +128,8 @@ export default function EditInvoiceForm({
     </form>
   );
 }
+
+//function useFormState(updateInvoiceWithId: (formData: FormData) => Promise<{ message: string; }>, initialState: { message: null; errors: {}; }): [any, any] {
+  //throw new Error('Function not implemented.');
+//}
+
